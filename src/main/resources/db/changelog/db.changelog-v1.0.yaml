@@ -1,0 +1,197 @@
+databaseChangeLog:
+  - changeSet:
+      id: v1.0-create-tables
+      author: your_name
+      changes:
+        - createTable:
+            tableName: courses
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+        - createTable:
+            tableName: chapters
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: order_number
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: course_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_chapter_course
+                    references: courses(id)
+                    onDelete: CASCADE
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+        - createTable:
+            tableName: lessons
+            columns:
+              - column:
+                  name: id
+                  type: bigserial
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: text
+              - column:
+                  name: content
+                  type: text
+              - column:
+                  name: order_number
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: chapter_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_lesson_chapter
+                    references: chapters(id)
+                    onDelete: CASCADE
+              - column:
+                  name: created_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+
+  - changeSet:
+      id: v1.0-insert-test-data
+      author: your_name
+      changes:
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: name
+                  value: "Java Developer"
+              - column:
+                  name: description
+                  value: "Complete Java development course"
+              - column:
+                  name: created_at
+                  valueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  valueComputed: CURRENT_TIMESTAMP
+
+        - insert:
+            tableName: courses
+            columns:
+              - column:
+                  name: name
+                  value: "Python Developer"
+              - column:
+                  name: description
+                  value: "Complete Python development course"
+              - column:
+                  name: created_at
+                  valueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  valueComputed: CURRENT_TIMESTAMP
+
+        - insert:
+            tableName: chapters
+            columns:
+              - column:
+                  name: name
+                  value: "Java Basics"
+              - column:
+                  name: description
+                  value: "Introduction to Java programming"
+              - column:
+                  name: order_number
+                  value: 1
+              - column:
+                  name: course_id
+                  valueComputed: (SELECT id FROM courses WHERE name = 'Java Developer')
+              - column:
+                  name: created_at
+                  valueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  valueComputed: CURRENT_TIMESTAMP
+
+        - insert:
+            tableName: lessons
+            columns:
+              - column:
+                  name: name
+                  value: "Java Data Types"
+              - column:
+                  name: description
+                  value: "Learning about Java primitive types"
+              - column:
+                  name: content
+                  value: "Full content about Java data types..."
+              - column:
+                  name: order_number
+                  value: 1
+              - column:
+                  name: chapter_id
+                  valueComputed: (SELECT id FROM chapters WHERE name = 'Java Basics')
+              - column:
+                  name: created_at
+                  valueComputed: CURRENT_TIMESTAMP
+              - column:
+                  name: updated_at
+                  valueComputed: CURRENT_TIMESTAMP
